@@ -1,12 +1,13 @@
 {% extends 'movieslist/base.html' %}
 
 {% block content %}
-<h1>Główna strona</h1>
-<p>Opis strony</p>
-<h2>Logowanie</h2>
+<h1>Twoje listy</h1>
 {% if user.is_authenticated %}
+    <p>Lista 1</p>
+    <p>Lista 2</p>
+    <br>
     <p> <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
 {% else %}
-    <a href="{% url 'login' %}">Login</a>
+    <p><a href="{% url 'login' %}">Zaloguj się aby zobaczyć swoje listy.</a></p>
 {% endif %}
 {% endblock %}
