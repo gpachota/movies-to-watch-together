@@ -14,7 +14,7 @@ def main_page(request):
 
 @login_required
 def list_detail(request, pk):
-    movielist = get_list_or_404(MovieList, pk=pk)
-    movies = get_object_or_404(MovieList, pk=pk).movies.all()
+    movielist = get_object_or_404(MovieList, pk=pk)
+    movies = get_list_or_404(Movie.objects.filter(movie_list=movielist.id))
 
     return render(request, 'movieslist/list_detail.html', {'movielist': movielist, 'movies': movies})
