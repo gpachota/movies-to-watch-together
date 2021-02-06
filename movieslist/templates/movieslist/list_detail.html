@@ -1,0 +1,13 @@
+{% extends 'movieslist/base.html' %}
+
+{% block content %}
+{% for list in movielist %}
+<h1>{{ list.title }}</h1>
+    {% for movie in movies %}
+        <p><span class="glyphicon glyphicon-minus"></span>{{ movie.title }}</p>
+    {% endfor %}
+{% endfor %}
+    <p> <a href="{% url 'main_page' %}">Powrót</a></p>
+    <br>
+    <p> <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+{% endblock %}
