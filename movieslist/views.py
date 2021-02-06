@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from .models import MovieList, Movie
+from .forms import MovieForm
+from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 
@@ -15,6 +17,23 @@ def main_page(request):
 @login_required
 def list_detail(request, pk):
     movielist = get_object_or_404(MovieList, pk=pk)
-    movies = get_list_or_404(Movie.objects.filter(movie_list=movielist.id))
+    movies = Movie.objects.filter(movie_list=movielist.id)
 
-    return render(request, 'movieslist/list_detail.html', {'movielist': movielist, 'movies': movies})
+    if request.method == "POST":
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            movie = form.save(commit=False)
+            movie.author = request.user
+            movie.movie_list = movielist
+            movie.save()
+            return redirect('list_detail', pk=pk)
+    else:
+        form = MovieForm()
+    return render(request, 'movieslist/list_detail.html', {'movielist': movielist, 'movies': movies, 'form': form})
+
+
+@login_required()
+def movie_remove(request, pk):
+    movie = get_object_or_404(Movie, pk=pk)
+    movie.delete()
+    return redirect('list_detail', pk=movie.movie_list.pk)

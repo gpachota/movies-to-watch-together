@@ -2,10 +2,21 @@
 
 {% block content %}
 <h1>{{ movielist.title }}</h1>
-    {% for movie in movies %}
-        <p><span class="glyphicon glyphicon-minus"></span>{{ movie.title }}</p>
-    {% endfor %}
-    <p> <a href="{% url 'main_page' %}">Powrót</a></p>
-    <br>
-    <p> <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+<form method="POST" class="post-form">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+{% for movie in movielist.movie_list_name.all %}
+<p><span class="glyphicon glyphicon-minus"></span>{{ movie.title }}
+    {% if user == movie.author %}
+    <a class="btn btn-default btn-xs" href="{% url 'movie_remove' pk=movie.pk %}"><span
+            class="glyphicon glyphicon-remove"></span></a>
+    {% endif %}
+</p>
+{% endfor %}
+<p><a href="{% url 'main_page' %}">Powrót</a></p>
+
+
+<br>
+<p><small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
 {% endblock %}
