@@ -24,6 +24,7 @@ def main_page(request):
 @login_required
 def list_detail(request, pk):
     movielist = get_object_or_404(MovieList, pk=pk)
+    contributors = movielist.contributors
     movies = Movie.objects.filter(movie_list=movielist.id)
 
     if request.method == "POST":
@@ -36,7 +37,8 @@ def list_detail(request, pk):
             return redirect('list_detail', pk=pk)
     else:
         form = MovieForm()
-    return render(request, 'movieslist/list_detail.html', {'movielist': movielist, 'movies': movies, 'form': form})
+    return render(request, 'movieslist/list_detail.html', {'movielist': movielist, 'movies': movies,
+                                                           'contributors': contributors, 'form': form})
 
 
 @login_required()
@@ -44,3 +46,10 @@ def movie_remove(request, pk):
     movie = get_object_or_404(Movie, pk=pk)
     movie.delete()
     return redirect('list_detail', pk=movie.movie_list.pk)
+
+
+@login_required()
+def list_remove(request, pk):
+    list = get_object_or_404(MovieList, pk=pk)
+    list.delete()
+    return redirect('main_page')
