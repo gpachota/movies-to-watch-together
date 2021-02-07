@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from .models import MovieList, Movie
-from .forms import MovieForm, MovieListForm
+from .forms import MovieForm, MovieListForm, CustomUserCreationForm
 from django.utils import timezone
+from django.urls import reverse
+from django.contrib.auth import login
 
 from django.contrib.auth.decorators import login_required
 
@@ -17,6 +19,7 @@ def main_page(request):
             return redirect('main_page')
     else:
         lists = None
+        form = MovieListForm()
 
     return render(request, 'movieslist/main_page.html', {'lists': lists, 'form': form})
 
@@ -53,3 +56,17 @@ def list_remove(request, pk):
     list = get_object_or_404(MovieList, pk=pk)
     list.delete()
     return redirect('main_page')
+
+
+def register(request):
+    if request.method == "GET":
+        return render(
+            request, "movieslist/register.html",
+            {"form": CustomUserCreationForm}
+        )
+    elif request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect(reverse("main_page"))

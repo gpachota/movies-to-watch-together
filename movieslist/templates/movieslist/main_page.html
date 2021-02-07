@@ -2,7 +2,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<h1>Twoje listy</h1>
+<h1>Your lists</h1>
     {% for list in lists %}
         <p><span class="glyphicon glyphicon-minus"></span><a href="{% url 'list_detail' pk=list.pk %}">{{ list.list_name }}</a></p>
     {% endfor %}
@@ -13,7 +13,9 @@
 </form>
     <br>
     <p> <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+    <p><small>(<a href="{% url 'password_change' %}">Change password</a>)</small></p>
 {% else %}
-    <p><a href="{% url 'login' %}">Zaloguj się aby zobaczyć swoje listy.</a></p>
+    <p><a href="{% url 'login' %}">Log in to see your lists.</a>
+    <p><a href="{% url 'register' %}">Register</a></p>
 {% endif %}
 {% endblock %}
