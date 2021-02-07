@@ -14,4 +14,4 @@ class MovieListForm(forms.ModelForm):
 
     class Meta:
         model = MovieList
-        fields = ('title', 'contributors',)
+        fields = ('list_name',)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from .models import MovieList, Movie
-from .forms import MovieForm
+from .forms import MovieForm, MovieListForm
 from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
@@ -9,9 +9,16 @@ from django.contrib.auth.decorators import login_required
 def main_page(request):
     if request.user.is_authenticated:
         lists = MovieList.objects.filter(contributors=request.user)
+        form = MovieListForm(request.POST or None)
+        if form.is_valid():
+            movie_list = form.save(commit=False)
+            movie_list.save()
+            movie_list.contributors.add(request.user)
+            return redirect('main_page')
     else:
         lists = None
-    return render(request, 'movieslist/main_page.html', {'lists': lists})
+
+    return render(request, 'movieslist/main_page.html', {'lists': lists, 'form': form})
 
 
 @login_required
