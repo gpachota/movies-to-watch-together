@@ -15,7 +15,7 @@
 <br>
 
 {% if user == contributors.all.0 %}
-    <p><a href="{% url 'list_remove' pk=movielist.pk %}">Usuń listę</a></p>
+    <p><a href="{% url 'list_remove' pk=movielist.pk %}" onclick="return confirm('Are you sure you want to delete this?')">Usuń listę</a></p>
 {% endif %}
 
 <p><a href="{% url 'main_page' %}">Powrót</a></p>
